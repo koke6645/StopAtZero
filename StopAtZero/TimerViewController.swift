@@ -19,7 +19,11 @@ class TimerViewController: UIViewController {
     var winGame = 0
     
     @IBAction func start(sender: AnyObject) {
-        timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("updateCounter"), userInfo: nil, repeats: true)
+        
+        if !timer.valid {
+            timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("updateCounter"), userInfo: nil, repeats: true)
+        }
+    
     }
     
     @IBAction func stop(sender: AnyObject) {
