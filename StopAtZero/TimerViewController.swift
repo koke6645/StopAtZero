@@ -20,23 +20,19 @@ class TimerViewController: UIViewController {
     
     @IBAction func start(sender: AnyObject) {
         
-        if !timer.valid {
-            timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("updateCounter"), userInfo: nil, repeats: true)
-        }
-    
+        guard !timer.valid else { return }
+        timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("updateCounter"), userInfo: nil, repeats: true)
     }
     
     @IBAction func stop(sender: AnyObject) {
         timer.invalidate()
-        updateResult()
+        totolPlay++
+        winGame = counter%10 == 0 ? ++winGame : winGame
+        resultLabel.text = String(format: "Result: %02d/%02d", winGame, totolPlay)
     }
     
     @IBAction func reset(sender: AnyObject) {
         timer.invalidate()
-        resetAll()
-    }
-    
-    func resetAll() {
         counter = 0
         totolPlay = 0
         winGame = 0
@@ -44,26 +40,12 @@ class TimerViewController: UIViewController {
         resultLabel.text = String(format: "Result: %02d/%02d", 0, 0)
     }
     
-    func showTime() {
+    func updateCounter() {
+        counter++
         let millisecond = counter<100 ? counter : counter%100
         let second = counter/100
         let minute = second/60
         timerLabel.text = String(format: "%02d:%02d:%02d", minute, second, millisecond)
-    }
-    
-    func updateCounter() {
-        counter++
-        showTime()
-    }
-    
-    func updateResult() {
-        totolPlay++
-        winGame = isWin() ? ++winGame : winGame
-        resultLabel.text = String(format: "Result: %02d/%02d", winGame, totolPlay)
-    }
-    
-    func isWin() -> Bool {
-        return counter%10 == 0 ? true : false
     }
     
     override func viewDidLoad() {
